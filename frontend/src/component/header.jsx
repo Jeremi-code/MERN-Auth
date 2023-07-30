@@ -1,5 +1,5 @@
 import {Navbar, Nav, Container} from 'react-bootstrap';
-import {FaSigninAlt, FaSignOutAlt} from 'react-icons/fa';
+import {FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 
 const Header = () => {
     return (
@@ -10,7 +10,7 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
-                    <Nav.Link href="/login"><FaSigninAlt/> Sign in</Nav.Link>
+                    <Nav.Link href="/login"><FaSignInAlt/> Sign in</Nav.Link>
                     <Nav.Link href="/register"><FaSignOutAlt/> Sign Up</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
