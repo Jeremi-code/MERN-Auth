@@ -1,4 +1,4 @@
-import {apiSlice} from './slices/apiSlice';
+import {apiSlice} from './apiSlice';
 const USERS_URL = 'api/users';
 
 export const userApiSlice = apiSlice.injectEndpoints({
@@ -8,7 +8,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: `${USERS_URL}/auth`,
                 method: 'POST',
                 body: data
-        })
+        }),
     })
 })
 });
