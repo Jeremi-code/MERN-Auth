@@ -1,8 +1,13 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Form, Button, Row, Col, Container} from 'react-bootstrap'
 import FormContainer from '../component/FormContainer'
-
+import {useDispatch, useSelector} from 'react-redux'
+import {toast} from 'react-toastify'
+import Loader from '../component/Loader'
+import {useRegisterMutation} from '../slices/userApiSlice'
+import {setCredentials} from '../slices/authSlice'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterScreen = () => {
     const [name, setName] = useState('')
@@ -10,10 +15,31 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword,setConfirmPassword] = useState('')
 
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const {userInfo} = useSelector((state)=>state.auth)
+    const [register,{isLoading}] = useRegisterMutation()
+
+    useEffect(() => {
+        if(userInfo){
+            navigate('/')
+        }
+    }, [navigate,userInfo])
 
     const submitHandler = async (e) =>{
         e.preventDefault()
-        console.log('submit')
+        if(password !== confirmPassword){
+            toast.error('Password do not match')
+        } else {
+            try {
+                const res = await register({name,email,password}).unwrap()
+                dispatch(setCredentials({...res}))
+                navigate('/')
+            } catch (err) {
+                toast.error('Invalid Credentials')
+            }
+        }
     }
 
     return (
@@ -42,6 +68,7 @@ const RegisterScreen = () => {
                     <Form.Control type='password' placeholder='Confirm password' value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}>
                     </Form.Control>
                 </Form.Group>
+                { isLoading && <Loader/>}
 
                 <Button type='submit' variant='primary' className='mt-3'>Sign Up</Button>
                 <Row className='py-3'>
