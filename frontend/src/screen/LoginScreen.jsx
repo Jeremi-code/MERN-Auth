@@ -5,7 +5,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import FormContainer from '../component/FormContainer'
 import { useLoginMutation } from '../slices/userApiSlice'
 import {setCredentials} from '../slices/authSlice'
-
+import { toast } from 'react-toastify'
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('')
@@ -15,7 +15,7 @@ const LoginScreen = () => {
     const dispatch = useDispatch()
 
     const [login,{isLoading}] = useLoginMutation()
-    const { userInfo } = useSelector(state => state.auth)
+    const { userInfo } = useSelector((state) => state.auth)
 
     useEffect(() => {
         if(userInfo){
@@ -25,14 +25,16 @@ const LoginScreen = () => {
 
     const submitHandler = async (e) =>{
         e.preventDefault()
+        console.log('what happened')
         try{
-            const res = await login({email,password}).unwrap()
-            dispatch(setCredentials(...res))
+            const res = await login({email,password}).unwrap();
+            dispatch(setCredentials({...res}))
             navigate('/')
         } catch(err){
-            console.log(err.data.message || err.error)
+            toast.error('Invalid Credentials')
         }
-    }
+
+    };
 
     return (
         <FormContainer>
@@ -51,12 +53,12 @@ const LoginScreen = () => {
                     </Form.Control>
                 </Form.Group>
                 <Button type='submit' variant='primary' className='mt-3'>Sign in</Button>
+            </Form>
                 <Row className='py-3'>
                     <Col>
                         New Customer? <Link to='/register'>Register</Link>
                     </Col>
                 </Row>
-            </Form>
         </FormContainer>
 
 
