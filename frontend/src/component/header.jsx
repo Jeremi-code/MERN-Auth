@@ -3,7 +3,6 @@ import {FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
 import {useLogoutMutation} from '../slices/userApiSlice'
 import {logout} from '../slices/authSlice'
 
