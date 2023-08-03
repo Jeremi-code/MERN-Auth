@@ -3,8 +3,10 @@ import {Form, Button} from 'react-bootstrap'
 import FormContainer from '../component/FormContainer'
 import {useDispatch, useSelector} from 'react-redux'
 import {toast} from 'react-toastify'
+import { useUpdateUserMutation } from '../slices/userApiSlice'
 import {setCredentials} from '../slices/authSlice'
 import { useNavigate } from 'react-router-dom'
+import Loader from '../component/Loader'
 
 const ProfileScreen = () => {
     const [name, setName] = useState('')
@@ -15,7 +17,7 @@ const ProfileScreen = () => {
     const dispatch = useDispatch()
 
     const {userInfo} = useSelector((state)=>state.auth)
-    // const [updateProfile , {isLoading}] = useUpdateUserMutation();
+    const [updateProfile , {isLoading}] = useUpdateUserMutation();
 
     useEffect(() => {
             setName(userInfo.name)
@@ -28,7 +30,18 @@ const ProfileScreen = () => {
         if(password !== confirmPassword){
             toast.error('Password do not match')
         } else {
-            console.log('submit')
+          try {
+            const res = await updateProfile({
+              _id : userInfo._id,
+              name,
+              email,
+              password
+            }).unwrap()
+            dispatch(setCredentials(res))
+            toast.success('Profile Updated')
+          } catch (err) {
+            toast.error(err.message)
+          }
         }
     }
 
@@ -58,7 +71,7 @@ const ProfileScreen = () => {
                     <Form.Control type='password' placeholder='Confirm password' value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}>
                     </Form.Control>
                 </Form.Group>
-
+                {isLoading && <Loader/>}
                 <Button type='submit' variant='primary' className='mt-3'>Update</Button>
 
             </Form>
