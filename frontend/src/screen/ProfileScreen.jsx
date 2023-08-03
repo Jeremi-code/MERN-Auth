@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import {toast} from 'react-toastify'
 import { useUpdateUserMutation } from '../slices/userApiSlice'
 import {setCredentials} from '../slices/authSlice'
-import { useNavigate } from 'react-router-dom'
 import Loader from '../component/Loader'
 
 const ProfileScreen = () => {
